@@ -1,5 +1,25 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
+import 'dart:async';
+
+void main() {
+  runApp(const MainApp());
+}
+
+class MainApp extends StatelessWidget {
+  const MainApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        useMaterial3: true,
+      ),
+      home: const SignupPage(),
+      debugShowCheckedModeBanner: false,
+    );
+  }
+}
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -19,11 +39,7 @@ class _SignupPageState extends State<SignupPage> {
   late final Timer _carouselTimer;
   int _currentPage = 0;
 
-  final List<String> _sampleImages = [
-    'Assets/gtr3.jpg',
-    'Assets/gtr2.jpg',
-    'Assets/gtr1.jpg',
-  ];
+  final List<String> _sampleImages = ['Assets/gtr3.jpg', 'Assets/gtr1.jpg'];
 
   @override
   void initState() {
@@ -240,8 +256,7 @@ class _SignupPageState extends State<SignupPage> {
                 ),
               ),
 
-              const SizedBox(height: 20), // Spacing between cards
-              // 2. Second Card: Auto-Scrolling Image Carousel
+              const SizedBox(height: 60),
               Card(
                 elevation: 4,
                 clipBehavior: Clip.antiAlias,
@@ -249,7 +264,7 @@ class _SignupPageState extends State<SignupPage> {
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: SizedBox(
-                  height: 180,
+                  height: 500,
                   width: double.infinity,
                   child: PageView.builder(
                     controller: _pageController,

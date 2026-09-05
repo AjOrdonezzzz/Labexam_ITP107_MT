@@ -39,7 +39,8 @@ class _SignupPageState extends State<SignupPage> {
   late final Timer _carouselTimer;
   int _currentPage = 0;
 
-  final List<String> _sampleImages = ['Assets/gtr3.jpg', 'Assets/gtr1.jpg'];
+  // Use exact asset paths with matching case (matching pubspec.yaml)
+  final List<String> _sampleImages = ['assets/gtr3.jpg', 'assets/gtr1.jpg'];
 
   @override
   void initState() {
@@ -48,13 +49,13 @@ class _SignupPageState extends State<SignupPage> {
 
     // Auto scroll every 3 seconds
     _carouselTimer = Timer.periodic(const Duration(seconds: 3), (Timer timer) {
-      if (_currentPage < _sampleImages.length - 1) {
-        _currentPage++;
-      } else {
-        _currentPage = 0;
-      }
-
       if (_pageController.hasClients) {
+        if (_currentPage < _sampleImages.length - 1) {
+          _currentPage++;
+        } else {
+          _currentPage = 0;
+        }
+
         _pageController.animateToPage(
           _currentPage,
           duration: const Duration(milliseconds: 350),
@@ -94,7 +95,7 @@ class _SignupPageState extends State<SignupPage> {
           padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
           child: Column(
             children: [
-              // 1. First Card: Form Container
+              // 1. Form Container Card
               Card(
                 elevation: 4,
                 shape: RoundedRectangleBorder(
@@ -257,6 +258,8 @@ class _SignupPageState extends State<SignupPage> {
               ),
 
               const SizedBox(height: 60),
+
+              // 2. Carousel Card (Fixed using Image.asset)
               Card(
                 elevation: 4,
                 clipBehavior: Clip.antiAlias,
@@ -269,10 +272,24 @@ class _SignupPageState extends State<SignupPage> {
                   child: PageView.builder(
                     controller: _pageController,
                     itemCount: _sampleImages.length,
+                    onPageChanged: (index) {
+                      setState(() {
+                        _currentPage = index;
+                      });
+                    },
                     itemBuilder: (context, index) {
-                      return Image.network(
+                      return Image.asset(
                         _sampleImages[index],
                         fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return const Center(
+                            child: Icon(
+                              Icons.broken_image,
+                              size: 50,
+                              color: Colors.grey,
+                            ),
+                          );
+                        },
                       );
                     },
                   ),
@@ -296,9 +313,7 @@ class _SignupPageState extends State<SignupPage> {
           },
           child: AbsorbPointer(
             child: ElevatedButton(
-              onPressed: () {
-                print("Hello World!");
-              },
+              onPressed: () {},
               child: const Text('Click Me'),
             ),
           ),
